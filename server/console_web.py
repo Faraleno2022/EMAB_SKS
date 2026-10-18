@@ -1,4 +1,4 @@
-"""Console web EMAB-SKS en local (hors-ligne).
+"""Console web SKS-EMAB en local (hors-ligne).
 
 Lance le serveur Django sur la machine (par défaut http://127.0.0.1:8765),
 ouvre le navigateur, et stocke les données dans un dossier utilisateur
@@ -429,7 +429,7 @@ def main() -> int:
     from django.core.management import call_command
 
     print("=" * 62)
-    print("  EMAB-SKS — Console web locale")
+    print("  SKS-EMAB — Console web locale")
     print("=" * 62)
     print(f"Données : {data_dir}")
     print("Préparation de la base locale…")
