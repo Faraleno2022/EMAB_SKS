@@ -1,6 +1,6 @@
 @echo off
 rem ============================================================
-rem  EMAB-SKS - Installer l'imprimante a tickets en un clic
+rem  SKS-EMAB - Installer l'imprimante a tickets en un clic
 rem  (Epson TM-T20III, POS-80 et autres imprimantes thermiques USB)
 rem
 rem  Double-cliquez : Windows demande les droits administrateur,

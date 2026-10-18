@@ -1,4 +1,4 @@
-# EMAB-SKS - Installation de l'imprimante a tickets (Epson TM-T20III, POS-80, ...)
+# SKS-EMAB - Installation de l'imprimante a tickets (Epson TM-T20III, POS-80, ...)
 #
 # Lance par Installer_Imprimante_Ticket.cmd. Ce script :
 #   1. demande les droits administrateur (necessaires pour installer un pilote) ;
@@ -21,7 +21,7 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$Host.UI.RawUI.WindowTitle = "EMAB-SKS - Installation de l'imprimante a tickets"
+$Host.UI.RawUI.WindowTitle = "SKS-EMAB - Installation de l'imprimante a tickets"
 
 function Pause-Exit([int]$code) {
     Write-Host ""
@@ -40,7 +40,7 @@ if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administra
 }
 
 Write-Host "=============================================================="
-Write-Host "  EMAB-SKS - Installation de l'imprimante a tickets"
+Write-Host "  SKS-EMAB - Installation de l'imprimante a tickets"
 Write-Host "=============================================================="
 Write-Host ""
 
@@ -160,7 +160,7 @@ public class EmabRawPrint {
     public static bool Send(string printer, byte[] data) {
         IntPtr h;
         if (!OpenPrinter(printer, out h, IntPtr.Zero)) return false;
-        var di = new DOCINFO { pDocName = "Ticket test EMAB-SKS", pDataType = "RAW" };
+        var di = new DOCINFO { pDocName = "Ticket test SKS-EMAB", pDataType = "RAW" };
         bool ok = false;
         if (StartDocPrinter(h, 1, ref di) != 0) {
             StartPagePrinter(h);
@@ -181,7 +181,7 @@ public class EmabRawPrint {
         $sep = "-" * $cols
         $txt  = "$ESC@" + "$ESC" + "t" + [char]19 + "$ESC" + "R" + [char]1
         $txt += "$ESC" + "a" + [char]1
-        $txt += "$ESC" + "E" + [char]1 + "$GS" + "!" + [char]0x11 + "EMAB-SKS`n" + "$GS" + "!" + [char]0 + "$ESC" + "E" + [char]0
+        $txt += "$ESC" + "E" + [char]1 + "$GS" + "!" + [char]0x11 + "SKS-EMAB`n" + "$GS" + "!" + [char]0 + "$ESC" + "E" + [char]0
         $txt += "TICKET DE TEST`n" + (Get-Date -Format "yyyy-MM-dd HH:mm") + "`n" + $sep + "`n"
         $txt += "$ESC" + "a" + [char]0
         $txt += "Imprimante : $chosen`nLargeur    : $PaperWidth mm`nAccents    : " + [char]0xE9 + [char]0xE8 + [char]0xE0 + [char]0xE7 + " " + [char]0x20AC + "`n" + $sep + "`n"
