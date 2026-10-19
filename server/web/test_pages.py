@@ -59,6 +59,8 @@ class PageTests(TestCase):
         self.assertIn('set "NAME=Caisse n\\u00b01 test \\u00e9"', body)   # caractères cmd retirés
         self.assertIn('"server_url": "%SERVER%"', body)
         self.assertIn("render_sync.json", body)
+        self.assertIn("EMAB-Console-Web.exe", body)   # console web seule : config + lancement
+        self.assertIn('if not exist "%CONSOLEDIR%" mkdir "%CONSOLEDIR%"', body)
         self.assertTrue(body.endswith("\r\n"))
         # Poste désactivé : pas de fichier.
         device.active = False
