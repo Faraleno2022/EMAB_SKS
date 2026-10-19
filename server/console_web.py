@@ -165,6 +165,33 @@ def _find_chrome() -> str:
     return shutil.which("chrome") or ""
 
 
+def _find_edge() -> str:
+    """Chemin de msedge.exe (présent d'office sous Windows 10/11), sinon ''."""
+    import shutil
+    candidates = [
+        os.path.expandvars(r"%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge.exe"),
+        os.path.expandvars(r"%ProgramFiles%\Microsoft\Edge\Application\msedge.exe"),
+        os.path.expandvars(r"%LOCALAPPDATA%\Microsoft\Edge\Application\msedge.exe"),
+    ]
+    for c in candidates:
+        if os.path.exists(c):
+            return c
+    return shutil.which("msedge") or ""
+
+
+def _find_app_browser() -> tuple[str, str]:
+    """(exécutable, nom du dossier de profil) d'un navigateur Chromium capable
+    d'ouvrir l'interface dans sa propre fenêtre (--app). Chrome d'abord, puis
+    Edge ; ('', '') si aucun des deux."""
+    chrome = _find_chrome()
+    if chrome:
+        return chrome, "ChromeCaisse"
+    edge = _find_edge()
+    if edge:
+        return edge, "EdgeCaisse"
+    return "", ""
+
+
 def _printers_module():
     """Module web.printers (détection, ESC/POS), aussi importable depuis la
     racine du dépôt (tests) : on ajoute alors le dossier server au chemin."""
@@ -248,19 +275,20 @@ def _seed_kiosk_printer(profile_dir: str) -> None:
 
 
 def _open_ui(url: str, data_dir: Path) -> None:
-    """Ouvre l'interface. Avec Chrome : mode caisse (impression directe du
-    ticket, sans boîte de dialogue). Sinon : navigateur par défaut."""
+    """Ouvre l'interface dans sa propre fenêtre (sans onglets ni barre d'adresse)
+    avec Chrome ou, à défaut, Edge : mode caisse (impression directe du ticket,
+    sans boîte de dialogue). Sans aucun des deux : navigateur par défaut."""
     import subprocess
-    chrome = _find_chrome()
-    if chrome:
-        profile = str(data_dir / "ChromeCaisse")
+    browser, profile_name = _find_app_browser()
+    if browser:
+        profile = str(data_dir / profile_name)
         _seed_kiosk_printer(profile)
         try:
             subprocess.Popen([
-                chrome,
+                browser,
                 "--kiosk-printing",            # window.print() imprime directement
                 f"--app={url}",                # fenêtre épurée, sans barre d'adresse
-                f"--user-data-dir={profile}",  # profil dédié, isolé du Chrome habituel
+                f"--user-data-dir={profile}",  # profil dédié, isolé du navigateur habituel
                 "--no-first-run",
                 "--no-default-browser-check",
             ])
