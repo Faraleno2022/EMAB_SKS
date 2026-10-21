@@ -46,12 +46,9 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 if _render_host:
     CSRF_TRUSTED_ORIGINS.append(f"https://{_render_host}")
-# Domaines personnalisés : autorisés d'office pour que la connexion (CSRF)
-# fonctionne dès que le DNS pointe, sans configuration supplémentaire.
-for _origin in (
-    "https://sks-emab.com", "https://www.sks-emab.com",
-    "https://emabgroup.com", "https://www.emabgroup.com",
-):
+# Domaine personnalisé EMAB-SKS : autorisé d'office pour que la connexion
+# (CSRF) fonctionne dès que le DNS pointe, sans configuration supplémentaire.
+for _origin in ("https://emabgroup.com", "https://www.emabgroup.com"):
     if _origin not in CSRF_TRUSTED_ORIGINS:
         CSRF_TRUSTED_ORIGINS.append(_origin)
 
